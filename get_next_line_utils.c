@@ -18,9 +18,11 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		i;
 	int		j;
 
+	if (!s1 && !s2)
+		return (NULL);
 	i = -1;
 	res = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!res || !s1 || !s2)
+	if (!res)
 		return (NULL);
 	while (s1[++i] != 0)
 		res[i] = s1[i];
@@ -31,7 +33,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (res);
 }
 
-char	*ft_strchr(const char *str, int searchar )
+char	*ft_strchr(const char *str, int searchar)
 {
 	char	*strout;
 
@@ -44,7 +46,6 @@ char	*ft_strchr(const char *str, int searchar )
 		return (NULL);
 }
 
-
 void	*ft_calloc(size_t byte)
 {
 	char	*res;
@@ -52,12 +53,8 @@ void	*ft_calloc(size_t byte)
 	res = malloc(byte);
 	if (!res)
 		return (NULL);
-	while (byte)
-	{
-		byte--;
-		res[byte] = '\0';
-		
-	}
+	while (byte > 0)
+		res[--byte] = '\0';
 	res[byte] = '\0';
 	return (res);
 }
