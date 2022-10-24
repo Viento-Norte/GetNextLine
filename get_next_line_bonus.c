@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jdecorte <jdecorte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_joinfree(char *buffer, char *buf)
 {
@@ -19,6 +19,7 @@ char	*ft_joinfree(char *buffer, char *buf)
 	temp = ft_strjoin(buffer, buf);
 	free(buffer);
 	buffer = NULL;
+	
 	if (!temp)
 		return (NULL);
 	return (temp);
@@ -42,8 +43,8 @@ char	*ft_next(char *buffer)
 	line = ft_calloc((ft_strlen(buffer) - i + 1), sizeof(char));
 	if (!line)
 	{
-	//	free(buffer);
-	//	buffer = NULL;
+		free(buffer);
+		buffer = NULL;
 		return (NULL);
 	}
 	i++;
@@ -76,7 +77,7 @@ char	*ft_line(char *buffer)
 	return (line);
 }
 
-char	*read_file(int fd, char *res)
+char	*read_file(int fd, char *res, int *ctr)
 {
 	char	buffer[BUFFER_SIZE + 1];
 	int		b_read;
@@ -97,21 +98,27 @@ char	*read_file(int fd, char *res)
 			return (NULL);
 		if (ft_strchr(buffer, '\n'))
 			break;
-	}
+		}
+	*ctr = b_read;
 	return (res);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer[OPEN_MAX];
 	char		*line;
+	int			ctr;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	ctr = 42;
+	if ( BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	buffer = read_file(fd, buffer);
-	if (!buffer)
+	if (!buffer[fd] || !ft_strchr(buffer[fd], '\n'))
+	{
+	buffer[fd] = read_file(fd, buffer[fd], &ctr);
+	if (!buffer[fd])
 		return (NULL);
-	line = ft_line(buffer);
-	buffer = ft_next(buffer);
+	}
+	line = ft_line(buffer[fd]);
+	buffer[fd] = ft_next(buffer[fd]);
 	return (line);
 }
