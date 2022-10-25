@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdecorte <jdecorte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: legarcia <legarcia@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/19 11:15:27 by jdecorte          #+#    #+#             */
-/*   Updated: 2021/10/19 11:59:18 by jdecorte         ###   ########.fr       */
+/*   Created: 2022/10/25 19:27:52 by legarcia          #+#    #+#             */
+/*   Updated: 2022/10/25 19:28:42 by legarcia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

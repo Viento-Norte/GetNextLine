@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdecorte <jdecorte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: legarcia <legarcia@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/19 11:09:06 by jdecorte          #+#    #+#             */
-/*   Updated: 2021/11/08 23:14:55 by jdecorte         ###   ########.fr       */
+/*   Created: 2022/10/25 19:14:28 by legarcia          #+#    #+#             */
+/*   Updated: 2022/10/25 19:22:15 by legarcia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,7 @@ char	*ft_next(char *buffer)
 	}
 	line = ft_calloc((ft_strlen(buffer) - i + 1), sizeof(char));
 	if (!line)
-	{
-	//	free(buffer);
-	//	buffer = NULL;
 		return (NULL);
-	}
 	i++;
 	j = 0;
 	while (buffer[i])
@@ -91,12 +87,12 @@ char	*read_file(int fd, char *res)
 		b_read = read(fd, buffer, BUFFER_SIZE);
 		if (b_read == -1)
 			return (NULL);
-		buffer[b_read] = 0;
+		buffer[b_read] ='\0';
 		res = ft_joinfree(res, buffer);
 		if (!res)
 			return (NULL);
 		if (ft_strchr(buffer, '\n'))
-			break;
+			break ;
 	}
 	return (res);
 }
@@ -106,8 +102,15 @@ char	*get_next_line(int fd)
 	static char	*buffer;
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	{
+		if (buffer)
+		{
+			free(buffer);
+			buffer = NULL;
+		}
 		return (NULL);
+	}
 	buffer = read_file(fd, buffer);
 	if (!buffer)
 		return (NULL);
