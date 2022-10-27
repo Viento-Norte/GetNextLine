@@ -12,6 +12,16 @@
 
 #include "get_next_line.h"
 
+char	*free_memory(char **s1)
+{
+	if (s1 && *s1)
+	{
+		free(*s1);
+		*s1 = NULL;
+	}
+	return (NULL);
+}
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*res;

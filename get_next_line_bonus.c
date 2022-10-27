@@ -17,8 +17,7 @@ char	*ft_joinfree(char *buffer, char *buf)
 	char	*temp;
 
 	temp = ft_strjoin(buffer, buf);
-	free(buffer);
-	buffer = NULL;
+	free_memory(&buffer);
 	if (!temp)
 		return (NULL);
 	return (temp);
@@ -34,20 +33,15 @@ char	*ft_next(char *buffer)
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	if (!buffer[i])
-	{
-		free(buffer);
-		buffer = NULL;
-		return (NULL);
-	}
-	line = ft_calloc((ft_strlen(buffer) - i + 1), sizeof(char));
+		return (free_memory(&buffer));
+	line = ft_calloc((ft_strlen(buffer) - i), sizeof(char));
 	if (!line)
-		return (NULL);
+		return (free_memory(&buffer));
 	i++;
 	j = 0;
 	while (buffer[i])
 		line[j++] = buffer[i++];
-	free(buffer);
-	buffer = NULL;
+	free_memory(&buffer);
 	return (line);
 }
 
@@ -61,7 +55,9 @@ char	*ft_line(char *buffer)
 		return (NULL);
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
-	line = ft_calloc(sizeof(char), (i + 2));
+	if (buffer[i] == '\n')
+		i++;
+	line = ft_calloc(sizeof(char), (i + 1));
 	if (!line)
 		return (NULL);
 	i = -1;
@@ -72,7 +68,7 @@ char	*ft_line(char *buffer)
 	return (line);
 }
 
-char	*read_file(int fd, char *res, int *ctr)
+char	*read_file(int fd, char *res)
 {
 	char	buffer[BUFFER_SIZE + 1];
 	int		b_read;
@@ -94,33 +90,29 @@ char	*read_file(int fd, char *res, int *ctr)
 		if (ft_strchr(buffer, '\n'))
 			break ;
 	}
-	*ctr = b_read;
 	return (res);
 }
 
 char	*get_next_line(int fd)
 {
 	static char	*buffer[OPEN_MAX];
-	char		*line;
-	int			ctr;
+	char		*line;	
 
-	ctr = 42;
 	if (BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
 		if (buffer[fd])
-		{
-			free(buffer[fd]);
-			buffer[fd] = NULL;
-		}
+			free_memory(&buffer[fd]);
 		return (NULL);
 	}
 	if (!buffer[fd] || !ft_strchr(buffer[fd], '\n'))
 	{
-		buffer[fd] = read_file(fd, buffer[fd], &ctr);
+		buffer[fd] = read_file(fd, buffer[fd]);
 		if (!buffer[fd])
 			return (NULL);
 	}
 	line = ft_line(buffer[fd]);
+	if (!line)
+		return (free_memory(&buffer[fd]));
 	buffer[fd] = ft_next(buffer[fd]);
 	return (line);
 }

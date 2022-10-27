@@ -25,4 +25,5 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr(const char *str, int searchar);
 void	*ft_calloc(size_t count, size_t size);
 size_t	ft_strlen(const char *str);
+char	*free_memory(char **s1);
 #endif
